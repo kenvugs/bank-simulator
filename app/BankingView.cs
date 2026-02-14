@@ -1,114 +1,96 @@
 using System;
-using ATMApp.Services;
 
-namespace ATMApp.View
+public class BankingView
 {
-    public static class BankingView
+    public void DisplayHeader(string name)
     {
-        public static void Run()
-        {
-            double balance = 1000.00;
-            int choice;
+        Console.WriteLine($"Name: {name}");
+        Console.WriteLine("=== Simple ATM System ===");
+        Console.WriteLine();
+    }
 
-            Console.WriteLine("Kenjay Lungayan");
-            Console.WriteLine("=== Simple ATM System ===");
-            Console.WriteLine();
-            Console.WriteLine($"Initial Balance: ₱{balance:F2}");
-            Console.WriteLine();
+    public void DisplayInitialBalance(double balance)
+    {
+        Console.WriteLine($"Initial Balance: ₱{balance:F2}");
+        Console.WriteLine();
+    }
 
-            while (true)
-            {
-                Console.WriteLine("1: Check Balance");
-                Console.WriteLine("2: Deposit Money");
-                Console.WriteLine("3: Withdraw Money");
-                Console.WriteLine("4: Print Mini Statement");
-                Console.WriteLine("5: Exit");
-                Console.Write("Select option: ");
+    public void DisplayMenu()
+    {
+        Console.WriteLine("1: Check Balance");
+        Console.WriteLine("2: Deposit Money");
+        Console.WriteLine("3: Withdraw Money");
+        Console.WriteLine("4: Print Mini Statement");
+        Console.WriteLine("5: Exit");
+        Console.Write("Select option: ");
+    }
 
-                if (!int.TryParse(Console.ReadLine(), out choice))
-                {
-                    Console.WriteLine("Invalid option selected. Please try again.");
-                    Console.WriteLine();
-                    continue;
-                }
+    public void DisplayBalance(double balance)
+    {
+        Console.WriteLine($"Current Balance: ₱{balance:F2}");
+        Console.WriteLine();
+    }
 
-                switch (choice)
-                {
-                    case 1:
-                        double currentBalance = BankingServices.GetBalance(balance);
-                        Console.WriteLine($"Current Balance: ₱{currentBalance:F2}");
-                        Console.WriteLine();
-                        break;
+    public double PromptDeposit()
+    {
+        Console.Write("Enter amount to deposit: ");
+        return Convert.ToDouble(Console.ReadLine());
+    }
 
-                    case 2:
-                        Console.Write("Enter amount to deposit: ");
-                        if (!double.TryParse(Console.ReadLine(), out double depositAmount))
-                        {
-                            Console.WriteLine("Invalid deposit amount. Please enter a positive value.");
-                            Console.WriteLine();
-                            continue;
-                        }
+    public double PromptWithdraw()
+    {
+        Console.Write("Enter amount to withdraw: ");
+        return Convert.ToDouble(Console.ReadLine());
+    }
 
-                        if (!BankingServices.Deposit(ref balance, depositAmount))
-                        {
-                            Console.WriteLine("Invalid deposit amount. Please enter a positive value.");
-                            Console.WriteLine();
-                            continue;
-                        }
+    public void DisplayDepositSuccess(double balance)
+    {
+        Console.WriteLine("Deposit successful.");
+        Console.WriteLine($"Updated Balance: ₱{balance:F2}");
+        Console.WriteLine();
+    }
 
-                        Console.WriteLine("Deposit successful.");
-                        Console.WriteLine($"Updated Balance: ₱{balance:F2}");
-                        Console.WriteLine();
-                        break;
+    public void DisplayDepositError()
+    {
+        Console.WriteLine("Invalid deposit amount. Please enter a positive value.");
+        Console.WriteLine();
+    }
 
-                    case 3:
-                        Console.Write("Enter amount to withdraw: ");
-                        if (!double.TryParse(Console.ReadLine(), out double withdrawAmount))
-                        {
-                            Console.WriteLine("Invalid withdrawal amount. Please enter a positive value.");
-                            Console.WriteLine();
-                            continue;
-                        }
+    public void DisplayWithdrawSuccess(double balance)
+    {
+        Console.WriteLine("Withdrawal successful.");
+        Console.WriteLine($"Updated Balance: ₱{balance:F2}");
+        Console.WriteLine();
+    }
 
-                        BankingServices.Withdraw(ref balance, withdrawAmount, out bool isSuccessful);
+    public void DisplayWithdrawInsufficient()
+    {
+        Console.WriteLine("Withdrawal failed. Insufficient balance.");
+        Console.WriteLine();
+    }
 
-                        if (!isSuccessful)
-                        {
-                            if (withdrawAmount <= 0)
-                            {
-                                Console.WriteLine("Invalid withdrawal amount. Please enter a positive value.");
-                            }
-                            else
-                            {
-                                Console.WriteLine("Withdrawal failed. Insufficient balance.");
-                            }
-                            Console.WriteLine();
-                            continue;
-                        }
+    public void DisplayWithdrawInvalid()
+    {
+        Console.WriteLine("Invalid withdrawal amount. Please enter a positive value.");
+        Console.WriteLine();
+    }
 
-                        Console.WriteLine("Withdrawal successful.");
-                        Console.WriteLine($"Updated Balance: ₱{balance:F2}");
-                        Console.WriteLine();
-                        break;
+    public void DisplayMiniStatement(double balance, double lastTransaction)
+    {
+        Console.WriteLine("--- Mini Statement ---");
+        Console.WriteLine($"Current Balance: ₱{balance:F2}");
+        Console.WriteLine($"Last Transaction Amount: ₱{lastTransaction:F2}");
+        Console.WriteLine();
+    }
 
-                    case 4:
-                        var statement = BankingServices.GetMiniStatement(balance);
-                        Console.WriteLine("--- Mini Statement ---");
-                        Console.WriteLine($"Current Balance: ₱{statement.currentBalance:F2}");
-                        Console.WriteLine($"Last Transaction Amount: ₱{statement.lastTransaction:F2}");
-                        Console.WriteLine();
-                        break;
+    public void DisplayInvalidOption()
+    {
+        Console.WriteLine("Invalid option selected. Please try again.");
+        Console.WriteLine();
+    }
 
-                    case 5:
-                        Console.WriteLine("Thank you for using the ATM. Goodbye!");
-                        return;
-
-                    default:
-                        Console.WriteLine("Invalid option selected. Please try again.");
-                        Console.WriteLine();
-                        break;
-                }
-            }
-        }
+    public void DisplayExit()
+    {
+        Console.WriteLine("Thank you for using the ATM. Goodbye!");
     }
 }
